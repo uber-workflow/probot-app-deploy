@@ -7,6 +7,7 @@
   "repository": "https://github.com/uber-web/probot-app-release.git",
   "scripts": {
     "start": "probot run ./index.js",
+    "jest": "jest",
     "test": "npm run lint && jest",
     "lint": "eslint .",
     "fix": "eslint . --fix"

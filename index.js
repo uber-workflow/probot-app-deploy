@@ -13,9 +13,9 @@ module.exports = robot => {
     const {github} = context;
     const {release} = context.payload;
 
-    github.repos.createRelease(
+    github.repos.createDeployment(
       context.repo({
-        tag_name: release.tag_name,
+        ref: release.tag_name,
         auto_merge: false,
       }),
     );
