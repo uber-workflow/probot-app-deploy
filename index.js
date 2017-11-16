@@ -17,6 +17,8 @@ module.exports = robot => {
       context.repo({
         ref: release.tag_name,
         auto_merge: false,
+        // Bypass required context checking when creating a deployment
+        required_contexts: [],
       }),
     );
 
