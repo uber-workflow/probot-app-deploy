@@ -4,7 +4,7 @@
   "description": "GitHub App that creates NPM deployments through Buildkite",
   "author": "Kevin Grandon <kevingrandon@yahoo.com>",
   "contributors": [],
-  "repository": "https://github.com/uber-web/probot-app-release.git",
+  "repository": "https://github.com/uber-workflow/probot-app-deploy.git",
   "scripts": {
     "start": "probot run ./index.js",
     "jest": "jest",
