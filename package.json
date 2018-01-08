@@ -1,6 +1,6 @@
 {
   "name": "probot-app-deploy",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "GitHub App that creates NPM deployments through Buildkite",
   "author": "Kevin Grandon <kevingrandon@yahoo.com>",
   "contributors": [],
