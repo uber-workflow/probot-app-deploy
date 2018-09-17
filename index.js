@@ -4,7 +4,7 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-const exec = require('child_process').exec;
+const fetch = require('node-fetch');
 
 module.exports = robot => {
   robot.on('release.published', released);
@@ -25,27 +25,42 @@ module.exports = robot => {
     // Kick off a deployment through buildkite
     const {login} = release.author;
     const {name, ssh_url} = context.payload.repository;
-    const curlCommand = `curl \
-      -H "Authorization: Bearer ${process.env.BUILDKITE_TOKEN}" \
-      -X POST "https://api.buildkite.com/v2/organizations/uberopensource/pipelines/npm-deploy/builds" \
-        -d '{
-          "commit": "HEAD",
-          "branch": "master",
-          "message": "Deploy ${name}",
-          "author": {
-            "name": "${login}"
-          },
-          "env": {
-            "PUBLISH_REPO": "${ssh_url}",
-            "TARGET_COMMITISH": "${release.tag_name}"
-          }
-        }'`;
 
-    exec(curlCommand, error => {
-      if (error !== null) {
-        // eslint-disable-next-line no-console
-        console.warn('exec error: ' + error);
+    let output;
+    try {
+      const payload = {
+        commit: 'HEAD',
+        branch: 'master',
+        message: `Deploy ${name}`,
+        author: {
+          name: login,
+        },
+        env: {
+          PUBLISH_REPO: ssh_url,
+          TARGET_COMMITISH: release.tag_name,
+        },
+      };
+
+      if (process.env.PUBLISH_ARGS) {
+        payload.env.PUBLISH_ARGS = process.env.PUBLISH_ARGS;
       }
-    });
+
+      const res = await fetch(
+        'https://api.buildkite.com/v2/organizations/uberopensource/pipelines/npm-deploy/builds',
+        {
+          method: 'POST',
+          body: JSON.stringify(payload),
+          headers: {
+            Authorization: `Bearer ${process.env.BUILDKITE_TOKEN}`,
+          },
+        },
+      );
+      output = await res.json();
+      // eslint-disable-next-line no-console
+      console.log('Buildkite triggered', output);
+    } catch (err) {
+      // eslint-disable-next-line no-console
+      console.warn(err);
+    }
   }
 };
