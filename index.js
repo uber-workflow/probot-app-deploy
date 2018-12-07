@@ -37,7 +37,7 @@ module.exports = robot => {
         },
         env: {
           PUBLISH_REPO: ssh_url,
-          TARGET_COMMITISH: release.tag_name,
+          TARGET_COMMITISH: `refs/tags/${release.tag_name}`,
         },
       };
 
