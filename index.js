@@ -13,7 +13,7 @@ module.exports = robot => {
     const {github} = context;
     const {release} = context.payload;
 
-    github.repos.createDeployment(
+    github.repos.createForAuthenticatedUserDeployment(
       context.repo({
         ref: release.tag_name,
         auto_merge: false,
